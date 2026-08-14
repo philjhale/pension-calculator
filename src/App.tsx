@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { calculatePensionProjection } from './calculator/calculatePensionProjection';
-import { DEFAULT_PENSION_CHARGES_PERCENTAGE } from './calculator/constants';
+import { DEFAULT_ANNUITY_RATE_PERCENTAGE, DEFAULT_PENSION_CHARGES_PERCENTAGE } from './calculator/constants';
 import type { PensionProjectionInputs } from './calculator/types';
+import { AnnuityRateField } from './components/AnnuityRateField';
 import { AssumptionsSection } from './components/AssumptionsSection';
 import { ContributionField } from './components/ContributionField';
 import { GrowthRateSlider } from './components/GrowthRateSlider';
@@ -23,6 +24,7 @@ const DEFAULT_INPUTS: PensionProjectionInputs = {
   salary: 35000,
   inflationRatePercentage: 2.6,
   pensionChargesPercentage: DEFAULT_PENSION_CHARGES_PERCENTAGE,
+  annuityRatePercentage: DEFAULT_ANNUITY_RATE_PERCENTAGE,
 };
 
 function App() {
@@ -178,11 +180,18 @@ function App() {
             updateInput('pensionChargesPercentage', value);
           }}
         />
+
+        <AnnuityRateField
+          value={inputs.annuityRatePercentage}
+          onChange={(value) => {
+            updateInput('annuityRatePercentage', value);
+          }}
+        />
       </form>
 
       <OutputsSummary outputs={outputs} />
 
-      <AssumptionsSection />
+      <AssumptionsSection annuityRatePercentage={inputs.annuityRatePercentage} />
 
       <section className="snapshots">
         <h2>Snapshots</h2>

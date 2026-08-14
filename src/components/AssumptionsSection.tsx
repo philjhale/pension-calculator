@@ -1,19 +1,20 @@
-import {
-  ANNUITY_RATE,
-  DEFAULT_PENSION_CHARGES_PERCENTAGE,
-  STATE_PENSION_ANNUAL,
-} from '../calculator/constants';
+import { DEFAULT_PENSION_CHARGES_PERCENTAGE, STATE_PENSION_ANNUAL } from '../calculator/constants';
 import { formatCurrency } from '../format';
 
-export function AssumptionsSection() {
+interface AssumptionsSectionProps {
+  annuityRatePercentage: number;
+}
+
+export function AssumptionsSection({ annuityRatePercentage }: AssumptionsSectionProps) {
   return (
     <details className="assumptions">
       <summary>Assumptions</summary>
       <ul>
         <li>
-          Pot Income is calculated by converting the pot (after the lump sum is taken) at a fixed
-          Annuity Rate of {ANNUITY_RATE * 100}%, standing in for the price of a guaranteed-for-life
-          annuity.
+          Pot Income is calculated by converting the pot (after the lump sum is taken) at your
+          chosen Annuity Rate ({annuityRatePercentage}%, editable), standing in for the price of a
+          guaranteed-for-life annuity. Real annuity rates vary by provider and age; different
+          reference calculators imply different rates (see ADR-0005).
         </li>
         <li>
           State Pension, if enabled, adds a flat {formatCurrency(STATE_PENSION_ANNUAL)}/yr (the
@@ -26,11 +27,15 @@ export function AssumptionsSection() {
           and Contributions are applied.
         </li>
         <li>
-          Growth Rate is applied as a nominal rate year-on-year, then the Pot Value, Lump Sum,
-          and Pot Income are deflated back to today&apos;s money using the Inflation rate, so
-          figures are comparable to what your money is worth now. State Pension is already a
-          today&apos;s-money figure and isn&apos;t deflated further. Salary (and therefore
-          Contributions) grows every year at the Inflation rate.
+          Your pot grows at the nominal Growth Rate each year — no inflation adjustment during
+          accumulation. At retirement, the Pot Value, Lump Sum, and Pot Income are then converted
+          into today&apos;s money using the Inflation Rate, so the figures shown reflect what that
+          amount would buy today, not its future face value. State Pension is already shown at
+          today&apos;s rate, so it isn&apos;t converted a second time.
+        </li>
+        <li>
+          Your Salary — and therefore your Contributions — increases every year in line with the
+          Inflation Rate, modelling a pay rise that keeps pace with prices.
         </li>
       </ul>
     </details>

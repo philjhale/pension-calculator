@@ -1,6 +1,7 @@
 import {
-  ANNUITY_RATE,
+  MAX_ANNUITY_RATE_PERCENTAGE,
   MAX_LUMP_SUM_PERCENTAGE,
+  MIN_ANNUITY_RATE_PERCENTAGE,
   MIN_LUMP_SUM_PERCENTAGE,
   STATE_PENSION_ANNUAL,
 } from './constants';
@@ -38,7 +39,13 @@ export function calculatePensionProjection(
   );
   const lumpSumValueNominal = pot * (lumpSumPercentage / 100);
   const remainingPotNominal = pot - lumpSumValueNominal;
-  const potIncomeNominal = remainingPotNominal * ANNUITY_RATE;
+  const annuityRatePercentage = clamp(
+    inputs.annuityRatePercentage,
+    MIN_ANNUITY_RATE_PERCENTAGE,
+    MAX_ANNUITY_RATE_PERCENTAGE,
+  );
+  const annuityRate = annuityRatePercentage / 100;
+  const potIncomeNominal = remainingPotNominal * annuityRate;
 
   // Deflate pot-derived figures to today's money; see ADR-0003. State Pension is
   // already expressed in today's terms (it's a fixed current-day constant), so it's

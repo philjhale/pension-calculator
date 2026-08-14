@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { calculatePensionProjection } from './calculatePensionProjection';
+import { MONEYHELPER_ANNUITY_RATE_PERCENTAGE } from './constants';
 import type { PensionProjectionInputs } from './types';
 
 const baseInputs: PensionProjectionInputs = {
@@ -14,6 +15,27 @@ const baseInputs: PensionProjectionInputs = {
   salary: 0,
   inflationRatePercentage: 2.6,
   pensionChargesPercentage: 0,
+  annuityRatePercentage: 4,
+};
+
+// MoneyHelper reference: age 43 -> 68, £300k pot, £100k salary, 5% gross (£5,000/yr) + 3%
+// employer (£3,000/yr) contributions, 5% growth, 2.5% inflation, 0.75%/yr pension charges.
+// Shared by the two multi-year fixtures below, which vary only lumpSumPercentage. Uses
+// MONEYHELPER_ANNUITY_RATE_PERCENTAGE (~5.28%) rather than the app's default (~4%, Vanguard's
+// implied rate) — see ADR-0005 for why MoneyHelper's own output implies a materially higher rate.
+const moneyHelperMultiYearInputs: PensionProjectionInputs = {
+  currentAge: 43,
+  retirementAge: 68,
+  statePensionEnabled: true,
+  lumpSumPercentage: 0,
+  growthRatePercentage: 5,
+  currentPot: 300000,
+  yourContributionPercentage: 5,
+  employerContributionPercentage: 3,
+  salary: 100000,
+  inflationRatePercentage: 2.5,
+  pensionChargesPercentage: 0.75,
+  annuityRatePercentage: MONEYHELPER_ANNUITY_RATE_PERCENTAGE,
 };
 
 describe('calculatePensionProjection', () => {
@@ -50,28 +72,27 @@ describe('calculatePensionProjection', () => {
       expect(Math.abs(outputs.incomePerYear - 12548) / 12548).toBeLessThan(0.01);
     });
 
-    it('matches a real multi-year MoneyHelper projection (within 1%)', () => {
-      // MoneyHelper reference: age 43 -> 68, £300k pot, £100k salary, 5% gross (£5,000/yr) +
-      // 3% employer (£3,000/yr) contributions, 5% growth, 2.5% inflation, 0.75%/yr pension
-      // charges, no lump sum. Result: £12,548/yr State Pension + £27,422/yr Pot Income =
-      // £39,970/yr Estimated Income. This is the first fixture to exercise a multi-year
-      // accumulation with non-zero growth, inflation, and charges together (see ADR-0003,
-      // ADR-0004) rather than the zero-year/zero-growth edge cases above.
+    it('matches a real multi-year MoneyHelper projection at 25% lump sum (within 1%)', () => {
+      // 25% lump sum (originally mis-recorded as 0% lump sum — corrected per verification
+      // against a fresh MoneyHelper run). Result: £12,548/yr State Pension + £27,422/yr Pot
+      // Income = £39,970/yr Estimated Income. This is the first fixture to exercise a
+      // multi-year accumulation with non-zero growth, inflation, and charges together (see
+      // ADR-0003, ADR-0004) rather than the zero-year/zero-growth edge cases above.
       const outputs = calculatePensionProjection({
-        currentAge: 43,
-        retirementAge: 68,
-        statePensionEnabled: true,
-        lumpSumPercentage: 0,
-        growthRatePercentage: 5,
-        currentPot: 300000,
-        yourContributionPercentage: 5,
-        employerContributionPercentage: 3,
-        salary: 100000,
-        inflationRatePercentage: 2.5,
-        pensionChargesPercentage: 0.75,
+        ...moneyHelperMultiYearInputs,
+        lumpSumPercentage: 25,
       });
 
       expect(Math.abs(outputs.incomePerYear - 39970) / 39970).toBeLessThan(0.01);
+    });
+
+    it('matches a real multi-year MoneyHelper projection at 0% lump sum (within 1%)', () => {
+      // Same underlying MoneyHelper projection as above, but with no lump sum taken: all of
+      // the pot is annuitized. Result: £12,548/yr State Pension + £36,483/yr Pot Income =
+      // £49,030/yr Estimated Income.
+      const outputs = calculatePensionProjection(moneyHelperMultiYearInputs);
+
+      expect(Math.abs(outputs.incomePerYear - 49030) / 49030).toBeLessThan(0.01);
     });
   });
 
@@ -94,6 +115,28 @@ describe('calculatePensionProjection', () => {
       });
 
       expect(outputs.lumpSumValue).toBeCloseTo(0, 5);
+    });
+
+    it('clamps a negative annuity rate to 0, never producing negative income', () => {
+      const outputs = calculatePensionProjection({
+        ...baseInputs,
+        currentPot: 100000,
+        lumpSumPercentage: 0,
+        annuityRatePercentage: -10,
+      });
+
+      expect(outputs.potIncome).toBeCloseTo(0, 5);
+    });
+
+    it('clamps an unreasonably high annuity rate at 20%', () => {
+      const outputs = calculatePensionProjection({
+        ...baseInputs,
+        currentPot: 100000,
+        lumpSumPercentage: 0,
+        annuityRatePercentage: 500,
+      });
+
+      expect(outputs.potIncome).toBeCloseTo(20000, 5);
     });
 
     it('adds exactly the State Pension constant when toggled on', () => {
@@ -162,7 +205,7 @@ describe('calculatePensionProjection', () => {
       const deflator = 1.026 ** 10;
       expect(outputs.totalPotValue).toBeCloseTo(100000 / deflator, 5);
       expect(outputs.lumpSumValue).toBeCloseTo(25000 / deflator, 5);
-      const expectedPotIncome = (75000 * 0.04) / deflator;
+      const expectedPotIncome = (75000 * (baseInputs.annuityRatePercentage / 100)) / deflator;
       expect(outputs.incomePerYear).toBeCloseTo(expectedPotIncome + 12548, 5);
     });
   });
