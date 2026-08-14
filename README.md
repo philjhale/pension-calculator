@@ -2,6 +2,8 @@
 
 A single-page tool for projecting UK defined-contribution pension outcomes and comparing scenarios side by side. See [CONTEXT.md](./CONTEXT.md) for the domain vocabulary and [docs/adr](./docs/adr) for the modelling decisions.
 
+Deployed at [philjhale.github.io/pension-calculator](https://philjhale.github.io/pension-calculator/).
+
 ## Development
 
 ```bash
