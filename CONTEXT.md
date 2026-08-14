@@ -21,7 +21,7 @@ A configurable annual percentage deducted from the whole pot at the end of each 
 _Avoid_: Fees, expense ratio
 
 **Annuity Rate**:
-A fixed assumed rate used to convert the pot (after the lump sum is taken) into Pot Income, standing in for the price of a guaranteed-for-life annuity. See [ADR-0002](./docs/adr/0002-annuity-based-retirement-income.md).
+A configurable assumed rate used to convert the pot (after the lump sum is taken) into Pot Income, standing in for the price of a guaranteed-for-life annuity. Defaults to 4%; reference calculators imply different rates (e.g. ~5.28% for MoneyHelper), so it's user-editable rather than fixed. See [ADR-0002](./docs/adr/0002-annuity-based-retirement-income.md) and [ADR-0005](./docs/adr/0005-configurable-annuity-rate.md).
 _Avoid_: Withdrawal rate, drawdown rate
 
 **Pot Income**:

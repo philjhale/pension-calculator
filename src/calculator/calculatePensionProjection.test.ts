@@ -131,6 +131,28 @@ describe('calculatePensionProjection', () => {
       expect(outputs.lumpSumValue).toBeCloseTo(0, 5);
     });
 
+    it('clamps a negative annuity rate to 0, never producing negative income', () => {
+      const outputs = calculatePensionProjection({
+        ...baseInputs,
+        currentPot: 100000,
+        lumpSumPercentage: 0,
+        annuityRatePercentage: -10,
+      });
+
+      expect(outputs.potIncome).toBeCloseTo(0, 5);
+    });
+
+    it('clamps an unreasonably high annuity rate at 20%', () => {
+      const outputs = calculatePensionProjection({
+        ...baseInputs,
+        currentPot: 100000,
+        lumpSumPercentage: 0,
+        annuityRatePercentage: 500,
+      });
+
+      expect(outputs.potIncome).toBeCloseTo(20000, 5);
+    });
+
     it('adds exactly the State Pension constant when toggled on', () => {
       const withoutStatePension = calculatePensionProjection({
         ...baseInputs,

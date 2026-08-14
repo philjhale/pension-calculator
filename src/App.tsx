@@ -3,6 +3,8 @@ import { calculatePensionProjection } from './calculator/calculatePensionProject
 import {
   DEFAULT_ANNUITY_RATE_PERCENTAGE,
   DEFAULT_PENSION_CHARGES_PERCENTAGE,
+  MAX_ANNUITY_RATE_PERCENTAGE,
+  MIN_ANNUITY_RATE_PERCENTAGE,
 } from './calculator/constants';
 import type { PensionProjectionInputs } from './calculator/types';
 import { AssumptionsSection } from './components/AssumptionsSection';
@@ -186,7 +188,8 @@ function App() {
         <NumberField
           id="annuity-rate"
           label="Annuity Rate (%)"
-          min={0}
+          min={MIN_ANNUITY_RATE_PERCENTAGE}
+          max={MAX_ANNUITY_RATE_PERCENTAGE}
           step={0.01}
           value={inputs.annuityRatePercentage}
           onChange={(value) => {
