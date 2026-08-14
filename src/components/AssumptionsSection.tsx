@@ -1,19 +1,20 @@
-import {
-  ANNUITY_RATE,
-  DEFAULT_PENSION_CHARGES_PERCENTAGE,
-  STATE_PENSION_ANNUAL,
-} from '../calculator/constants';
+import { DEFAULT_PENSION_CHARGES_PERCENTAGE, STATE_PENSION_ANNUAL } from '../calculator/constants';
 import { formatCurrency } from '../format';
 
-export function AssumptionsSection() {
+interface AssumptionsSectionProps {
+  annuityRatePercentage: number;
+}
+
+export function AssumptionsSection({ annuityRatePercentage }: AssumptionsSectionProps) {
   return (
     <details className="assumptions">
       <summary>Assumptions</summary>
       <ul>
         <li>
-          Pot Income is calculated by converting the pot (after the lump sum is taken) at a fixed
-          Annuity Rate of {ANNUITY_RATE * 100}%, standing in for the price of a guaranteed-for-life
-          annuity.
+          Pot Income is calculated by converting the pot (after the lump sum is taken) at your
+          chosen Annuity Rate ({annuityRatePercentage}%, editable), standing in for the price of a
+          guaranteed-for-life annuity. Real annuity rates vary by provider and age; different
+          reference calculators imply different rates (see ADR-0005).
         </li>
         <li>
           State Pension, if enabled, adds a flat {formatCurrency(STATE_PENSION_ANNUAL)}/yr (the

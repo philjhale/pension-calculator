@@ -10,6 +10,7 @@ export interface PensionProjectionInputs {
   salary: number;
   inflationRatePercentage: number;
   pensionChargesPercentage: number;
+  annuityRatePercentage: number;
 }
 
 export interface PensionProjectionOutputs {

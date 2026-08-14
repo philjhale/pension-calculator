@@ -14,7 +14,15 @@ const baseInputs: PensionProjectionInputs = {
   salary: 0,
   inflationRatePercentage: 2.6,
   pensionChargesPercentage: 0,
+  annuityRatePercentage: 4,
 };
+
+// Rate implied by the real multi-year MoneyHelper reference projections below (age 43 -> 68,
+// £300k pot, £100k salary, 8% combined contribution, 5% growth, 2.5% inflation, 0.75% charges),
+// at both 0% and 25% lump sum. See ADR-0005: MoneyHelper's implied annuity rate is materially
+// higher than the ~4% implied by the Vanguard fixture above, hence the rate is now a
+// user-editable input rather than a shared constant.
+const MONEYHELPER_ANNUITY_RATE_PERCENTAGE = 5.28;
 
 describe('calculatePensionProjection', () => {
   describe('verification fixtures', () => {
@@ -50,13 +58,39 @@ describe('calculatePensionProjection', () => {
       expect(Math.abs(outputs.incomePerYear - 12548) / 12548).toBeLessThan(0.01);
     });
 
-    it('matches a real multi-year MoneyHelper projection (within 1%)', () => {
+    it('matches a real multi-year MoneyHelper projection at 25% lump sum (within 1%)', () => {
       // MoneyHelper reference: age 43 -> 68, £300k pot, £100k salary, 5% gross (£5,000/yr) +
       // 3% employer (£3,000/yr) contributions, 5% growth, 2.5% inflation, 0.75%/yr pension
-      // charges, no lump sum. Result: £12,548/yr State Pension + £27,422/yr Pot Income =
-      // £39,970/yr Estimated Income. This is the first fixture to exercise a multi-year
-      // accumulation with non-zero growth, inflation, and charges together (see ADR-0003,
-      // ADR-0004) rather than the zero-year/zero-growth edge cases above.
+      // charges, 25% lump sum (originally mis-recorded as 0% lump sum — corrected per
+      // verification against a fresh MoneyHelper run). Result: £12,548/yr State Pension +
+      // £27,422/yr Pot Income = £39,970/yr Estimated Income. This is the first fixture to
+      // exercise a multi-year accumulation with non-zero growth, inflation, and charges
+      // together (see ADR-0003, ADR-0004) rather than the zero-year/zero-growth edge cases
+      // above. It also implies a ~5.28% annuity rate, materially different from Vanguard's
+      // ~4% (see ADR-0005), which is why annuityRatePercentage is passed explicitly here
+      // rather than relying on the app's default.
+      const outputs = calculatePensionProjection({
+        currentAge: 43,
+        retirementAge: 68,
+        statePensionEnabled: true,
+        lumpSumPercentage: 25,
+        growthRatePercentage: 5,
+        currentPot: 300000,
+        yourContributionPercentage: 5,
+        employerContributionPercentage: 3,
+        salary: 100000,
+        inflationRatePercentage: 2.5,
+        pensionChargesPercentage: 0.75,
+        annuityRatePercentage: MONEYHELPER_ANNUITY_RATE_PERCENTAGE,
+      });
+
+      expect(Math.abs(outputs.incomePerYear - 39970) / 39970).toBeLessThan(0.01);
+    });
+
+    it('matches a real multi-year MoneyHelper projection at 0% lump sum (within 1%)', () => {
+      // Same underlying MoneyHelper projection as above, but with no lump sum taken: all of
+      // the pot is annuitized. Result: £12,548/yr State Pension + £36,483/yr Pot Income =
+      // £49,030/yr Estimated Income.
       const outputs = calculatePensionProjection({
         currentAge: 43,
         retirementAge: 68,
@@ -69,9 +103,10 @@ describe('calculatePensionProjection', () => {
         salary: 100000,
         inflationRatePercentage: 2.5,
         pensionChargesPercentage: 0.75,
+        annuityRatePercentage: MONEYHELPER_ANNUITY_RATE_PERCENTAGE,
       });
 
-      expect(Math.abs(outputs.incomePerYear - 39970) / 39970).toBeLessThan(0.01);
+      expect(Math.abs(outputs.incomePerYear - 49030) / 49030).toBeLessThan(0.01);
     });
   });
 
