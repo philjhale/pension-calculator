@@ -13,6 +13,7 @@ import { NumberField } from './components/NumberField';
 import { OutputsSummary } from './components/OutputsSummary';
 import { PensionChargesField } from './components/PensionChargesField';
 import { SnapshotTable } from './components/SnapshotTable';
+import { loadInputs, saveInputs } from './config/storage';
 import { loadSnapshots, saveSnapshots } from './snapshot/storage';
 import type { Snapshot } from './snapshot/types';
 
@@ -32,10 +33,16 @@ const DEFAULT_INPUTS: PensionProjectionInputs = {
 };
 
 function App() {
-  const [inputs, setInputs] = useState<PensionProjectionInputs>(DEFAULT_INPUTS);
+  const [inputs, setInputs] = useState<PensionProjectionInputs>(
+    () => ({ ...DEFAULT_INPUTS, ...loadInputs() }),
+  );
   const [snapshots, setSnapshots] = useState<Snapshot[]>(() => loadSnapshots());
   const [snapshotLabel, setSnapshotLabel] = useState('');
   const outputs = calculatePensionProjection(inputs);
+
+  useEffect(() => {
+    saveInputs(inputs);
+  }, [inputs]);
 
   useEffect(() => {
     saveSnapshots(snapshots);
