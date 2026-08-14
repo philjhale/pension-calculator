@@ -281,10 +281,18 @@ button[aria-pressed='true'] {
   flex: 1;
 }
 
+.snapshot-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
 .snapshot-table {
   width: 100%;
+  min-width: 1080px;
   border-collapse: collapse;
   font-size: 14px;
+  font-variant-numeric: tabular-nums;
 }
 
 .snapshot-table th,
@@ -292,12 +300,38 @@ button[aria-pressed='true'] {
   padding: 8px 10px;
   border-bottom: 1px solid var(--border);
   text-align: left;
+  white-space: nowrap;
 }
 
 .snapshot-table th {
   color: var(--text);
   font-weight: 500;
   font-size: 13px;
+}
+
+.snapshot-table thead tr:first-child th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border-bottom: 1px solid var(--accent-border);
+}
+
+.snapshot-table thead tr:first-child th:first-child,
+.snapshot-table thead tr:first-child th:last-child {
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+}
+
+.snapshot-table th.col-label,
+.snapshot-table td.col-label {
+  position: sticky;
+  left: 0;
+  background: var(--bg);
+  color: var(--text-h);
+  font-weight: 500;
+  box-shadow: 1px 0 0 var(--border);
 }
 
 @media (max-width: 640px) {
