@@ -11,6 +11,7 @@ import { ContributionField } from './components/ContributionField';
 import { GrowthRateSlider } from './components/GrowthRateSlider';
 import { NumberField } from './components/NumberField';
 import { OutputsSummary } from './components/OutputsSummary';
+import { PensionChargesField } from './components/PensionChargesField';
 import { SnapshotTable } from './components/SnapshotTable';
 import { loadSnapshots, saveSnapshots } from './snapshot/storage';
 import type { Snapshot } from './snapshot/types';
@@ -175,11 +176,7 @@ function App() {
             }}
           />
 
-          <NumberField
-            id="pension-charges"
-            label="Pension Charges (%/yr)"
-            min={0}
-            step={0.05}
+          <PensionChargesField
             value={inputs.pensionChargesPercentage}
             onChange={(value) => {
               updateInput('pensionChargesPercentage', value);

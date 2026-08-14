@@ -14,6 +14,12 @@ export const STATE_PENSION_ANNUAL = 12548;
 /** Default annual pension charges, taken from the pot each year. See ADR-0004. */
 export const DEFAULT_PENSION_CHARGES_PERCENTAGE = 0.75;
 
+/** Pension charges implied by Vanguard's reference calculator. */
+export const VANGUARD_PENSION_CHARGES_PERCENTAGE = 0.15;
+
+/** A mid-range annual pension charge, between Vanguard's and MoneyHelper's defaults. */
+export const AVERAGE_PENSION_CHARGES_PERCENTAGE = 0.5;
+
 export const MIN_LUMP_SUM_PERCENTAGE = 0;
 export const MAX_LUMP_SUM_PERCENTAGE = 25;
 
