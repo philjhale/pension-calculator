@@ -12,7 +12,7 @@ import type { Snapshot } from './snapshot/types';
 
 const DEFAULT_INPUTS: PensionProjectionInputs = {
   currentAge: 30,
-  retirementAge: 65,
+  retirementAge: 68,
   statePensionEnabled: true,
   lumpSumPercentage: 25,
   growthRatePercentage: 5,
