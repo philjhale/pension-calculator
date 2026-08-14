@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
 import { calculatePensionProjection } from './calculator/calculatePensionProjection';
-import {
-  DEFAULT_ANNUITY_RATE_PERCENTAGE,
-  DEFAULT_PENSION_CHARGES_PERCENTAGE,
-  MAX_ANNUITY_RATE_PERCENTAGE,
-  MIN_ANNUITY_RATE_PERCENTAGE,
-} from './calculator/constants';
+import { DEFAULT_ANNUITY_RATE_PERCENTAGE, DEFAULT_PENSION_CHARGES_PERCENTAGE } from './calculator/constants';
 import type { PensionProjectionInputs } from './calculator/types';
+import { AnnuityRateField } from './components/AnnuityRateField';
 import { AssumptionsSection } from './components/AssumptionsSection';
 import { ContributionField } from './components/ContributionField';
 import { GrowthRateSlider } from './components/GrowthRateSlider';
@@ -185,12 +181,7 @@ function App() {
           }}
         />
 
-        <NumberField
-          id="annuity-rate"
-          label="Annuity Rate (%)"
-          min={MIN_ANNUITY_RATE_PERCENTAGE}
-          max={MAX_ANNUITY_RATE_PERCENTAGE}
-          step={0.01}
+        <AnnuityRateField
           value={inputs.annuityRatePercentage}
           onChange={(value) => {
             updateInput('annuityRatePercentage', value);
