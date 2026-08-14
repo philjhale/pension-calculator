@@ -27,11 +27,15 @@ export function AssumptionsSection({ annuityRatePercentage }: AssumptionsSection
           and Contributions are applied.
         </li>
         <li>
-          Growth Rate is applied as a nominal rate year-on-year, then the Pot Value, Lump Sum,
-          and Pot Income are deflated back to today&apos;s money using the Inflation rate, so
-          figures are comparable to what your money is worth now. State Pension is already a
-          today&apos;s-money figure and isn&apos;t deflated further. Salary (and therefore
-          Contributions) grows every year at the Inflation rate.
+          Your pot grows at the nominal Growth Rate each year — no inflation adjustment during
+          accumulation. At retirement, the Pot Value, Lump Sum, and Pot Income are then converted
+          into today&apos;s money using the Inflation Rate, so the figures shown reflect what that
+          amount would buy today, not its future face value. State Pension is already shown at
+          today&apos;s rate, so it isn&apos;t converted a second time.
+        </li>
+        <li>
+          Your Salary — and therefore your Contributions — increases every year in line with the
+          Inflation Rate, modelling a pay rise that keeps pace with prices.
         </li>
       </ul>
     </details>
