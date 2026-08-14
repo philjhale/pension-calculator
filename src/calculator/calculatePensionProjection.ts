@@ -54,6 +54,8 @@ export function calculatePensionProjection(
   return {
     totalPotValue,
     lumpSumValue,
+    potIncome,
+    statePensionIncome,
     incomePerYear,
     incomePerMonth: incomePerYear / 12,
   };

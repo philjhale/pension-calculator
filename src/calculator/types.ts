@@ -15,6 +15,8 @@ export interface PensionProjectionInputs {
 export interface PensionProjectionOutputs {
   totalPotValue: number;
   lumpSumValue: number;
+  potIncome: number;
+  statePensionIncome: number;
   incomePerYear: number;
   incomePerMonth: number;
 }
