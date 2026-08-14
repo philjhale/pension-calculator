@@ -31,6 +31,26 @@ describe('loadInputs', () => {
     expect(loadInputs()).toBeNull();
   });
 
+  it('returns null when the stored value is valid JSON but the wrong shape', () => {
+    localStorage.setItem('pension-calculator:inputs', JSON.stringify([1, 2, 3]));
+    expect(loadInputs()).toBeNull();
+  });
+
+  it('returns null when a field has the wrong type', () => {
+    localStorage.setItem(
+      'pension-calculator:inputs',
+      JSON.stringify({ ...sampleInputs, currentAge: 'thirty' }),
+    );
+    expect(loadInputs()).toBeNull();
+  });
+
+  it('returns null when a field is missing', () => {
+    const incomplete: Record<string, unknown> = { ...sampleInputs };
+    delete incomplete.currentAge;
+    localStorage.setItem('pension-calculator:inputs', JSON.stringify(incomplete));
+    expect(loadInputs()).toBeNull();
+  });
+
   it('round-trips values saved by saveInputs', () => {
     saveInputs(sampleInputs);
     expect(loadInputs()).toEqual(sampleInputs);
