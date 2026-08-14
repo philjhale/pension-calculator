@@ -13,7 +13,7 @@ The user's annual gross income, used to derive Contribution £ amounts from thei
 _Avoid_: Income, earnings (those terms are reserved for the retirement Income output)
 
 **Growth Rate**:
-The nominal annual rate applied to the pension pot's investment growth. Not inflation-adjusted — see [ADR-0001](./docs/adr/0001-nominal-growth-with-inflation-linked-uprating.md).
+The nominal annual rate applied to the pension pot's investment growth. Pot-derived outputs are deflated back to today's money using the Inflation rate before being shown — see [ADR-0001](./docs/adr/0001-nominal-growth-with-inflation-linked-uprating.md) and [ADR-0003](./docs/adr/0003-deflate-pot-derived-outputs-to-todays-money.md).
 _Avoid_: Return, interest rate
 
 **Annuity Rate**:

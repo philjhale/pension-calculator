@@ -17,9 +17,11 @@ export function AssumptionsSection() {
           State Pension age modelled.
         </li>
         <li>
-          Growth Rate is applied as a nominal rate, with no separate discounting back to
-          &quot;today&apos;s money&quot;. Salary (and therefore Contributions) grows every year at
-          the Inflation rate instead.
+          Growth Rate is applied as a nominal rate year-on-year, then the Pot Value, Lump Sum,
+          and Pot Income are deflated back to today&apos;s money using the Inflation rate, so
+          figures are comparable to what your money is worth now. State Pension is already a
+          today&apos;s-money figure and isn&apos;t deflated further. Salary (and therefore
+          Contributions) grows every year at the Inflation rate.
         </li>
       </ul>
     </details>

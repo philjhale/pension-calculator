@@ -33,14 +33,23 @@ export function calculatePensionProjection(
     MIN_LUMP_SUM_PERCENTAGE,
     MAX_LUMP_SUM_PERCENTAGE,
   );
-  const lumpSumValue = pot * (lumpSumPercentage / 100);
-  const remainingPot = pot - lumpSumValue;
-  const potIncome = remainingPot * ANNUITY_RATE;
+  const lumpSumValueNominal = pot * (lumpSumPercentage / 100);
+  const remainingPotNominal = pot - lumpSumValueNominal;
+  const potIncomeNominal = remainingPotNominal * ANNUITY_RATE;
+
+  // Deflate pot-derived figures to today's money; see ADR-0003. State Pension is
+  // already expressed in today's terms (it's a fixed current-day constant), so it's
+  // added after deflation rather than grown and deflated with the pot.
+  const deflator = (1 + inflationRate) ** yearsToRetirement;
+  const totalPotValue = pot / deflator;
+  const lumpSumValue = lumpSumValueNominal / deflator;
+  const potIncome = potIncomeNominal / deflator;
+
   const statePensionIncome = inputs.statePensionEnabled ? STATE_PENSION_ANNUAL : 0;
   const incomePerYear = potIncome + statePensionIncome;
 
   return {
-    totalPotValue: pot,
+    totalPotValue,
     lumpSumValue,
     incomePerYear,
     incomePerMonth: incomePerYear / 12,

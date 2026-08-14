@@ -115,8 +115,30 @@ describe('calculatePensionProjection', () => {
       });
 
       // year 1: contribution = 10% * 100,000 = 10,000; salary grows to 110,000
-      // year 2: contribution = 10% * 110,000 = 11,000; pot = 10,000 + 11,000 = 21,000
-      expect(outputs.totalPotValue).toBeCloseTo(21000, 5);
+      // year 2: contribution = 10% * 110,000 = 11,000; nominal pot = 10,000 + 11,000 = 21,000
+      // deflated to today's money at 10% inflation over 2 years: 21,000 / 1.1^2
+      expect(outputs.totalPotValue).toBeCloseTo(21000 / 1.1 ** 2, 5);
+    });
+
+    it("deflates pot-derived figures to today's money using the inflation rate, but not State Pension", () => {
+      // Isolates the deflation step: zero contributions/growth so the nominal pot never
+      // changes, only the deflator (1.026^10) shrinks the reported figures.
+      const outputs = calculatePensionProjection({
+        ...baseInputs,
+        currentAge: 55,
+        retirementAge: 65,
+        growthRatePercentage: 0,
+        inflationRatePercentage: 2.6,
+        currentPot: 100000,
+        lumpSumPercentage: 25,
+        statePensionEnabled: true,
+      });
+
+      const deflator = 1.026 ** 10;
+      expect(outputs.totalPotValue).toBeCloseTo(100000 / deflator, 5);
+      expect(outputs.lumpSumValue).toBeCloseTo(25000 / deflator, 5);
+      const expectedPotIncome = (75000 * 0.04) / deflator;
+      expect(outputs.incomePerYear).toBeCloseTo(expectedPotIncome + 12548, 5);
     });
   });
 });
