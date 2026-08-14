@@ -15,7 +15,7 @@ export function SnapshotTable({ snapshots, onRemove }: SnapshotTableProps) {
     <table className="snapshot-table">
       <thead>
         <tr>
-          <th>Scenario</th>
+          <th>Snapshot</th>
           <th>Total Pot Value</th>
           <th>Lump Sum</th>
           <th>Income per Year</th>

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { calculatePensionProjection } from './calculator/calculatePensionProjection';
+import { DEFAULT_PENSION_CHARGES_PERCENTAGE } from './calculator/constants';
 import type { PensionProjectionInputs } from './calculator/types';
 import { AssumptionsSection } from './components/AssumptionsSection';
 import { ContributionField } from './components/ContributionField';
 import { GrowthRateSlider } from './components/GrowthRateSlider';
+import { NumberField } from './components/NumberField';
 import { OutputsSummary } from './components/OutputsSummary';
 import { SnapshotTable } from './components/SnapshotTable';
-import { parseNumberInput } from './format';
 import { loadSnapshots, saveSnapshots } from './snapshot/storage';
 import type { Snapshot } from './snapshot/types';
 
@@ -21,6 +22,7 @@ const DEFAULT_INPUTS: PensionProjectionInputs = {
   employerContributionPercentage: 3,
   salary: 35000,
   inflationRatePercentage: 2.6,
+  pensionChargesPercentage: DEFAULT_PENSION_CHARGES_PERCENTAGE,
 };
 
 function App() {
@@ -41,7 +43,7 @@ function App() {
   }
 
   function saveSnapshot() {
-    const label = snapshotLabel.trim() || `Scenario ${String(snapshots.length + 1)}`;
+    const label = snapshotLabel.trim() || `Snapshot ${String(snapshots.length + 1)}`;
     const snapshot: Snapshot = {
       id: crypto.randomUUID(),
       label,
@@ -61,33 +63,27 @@ function App() {
       <h1>Pension Calculator</h1>
 
       <form>
-        <div className="field">
-          <label htmlFor="current-age">Current Age</label>
-          <input
-            id="current-age"
-            type="number"
-            min={16}
-            max={100}
-            value={inputs.currentAge}
-            onChange={(event) => {
-              updateInput('currentAge', parseNumberInput(event.target.value));
-            }}
-          />
-        </div>
+        <NumberField
+          id="current-age"
+          label="Current Age"
+          min={16}
+          max={100}
+          value={inputs.currentAge}
+          onChange={(value) => {
+            updateInput('currentAge', value);
+          }}
+        />
 
-        <div className="field">
-          <label htmlFor="retirement-age">Retirement Age</label>
-          <input
-            id="retirement-age"
-            type="number"
-            min={16}
-            max={100}
-            value={inputs.retirementAge}
-            onChange={(event) => {
-              updateInput('retirementAge', parseNumberInput(event.target.value));
-            }}
-          />
-        </div>
+        <NumberField
+          id="retirement-age"
+          label="Retirement Age"
+          min={16}
+          max={100}
+          value={inputs.retirementAge}
+          onChange={(value) => {
+            updateInput('retirementAge', value);
+          }}
+        />
 
         <div className="field field-checkbox">
           <label htmlFor="state-pension">
@@ -103,19 +99,16 @@ function App() {
           </label>
         </div>
 
-        <div className="field">
-          <label htmlFor="lump-sum">Lump Sum (%, capped at 25)</label>
-          <input
-            id="lump-sum"
-            type="number"
-            min={0}
-            max={25}
-            value={inputs.lumpSumPercentage}
-            onChange={(event) => {
-              updateInput('lumpSumPercentage', parseNumberInput(event.target.value));
-            }}
-          />
-        </div>
+        <NumberField
+          id="lump-sum"
+          label="Lump Sum (%, capped at 25)"
+          min={0}
+          max={25}
+          value={inputs.lumpSumPercentage}
+          onChange={(value) => {
+            updateInput('lumpSumPercentage', value);
+          }}
+        />
 
         <GrowthRateSlider
           value={inputs.growthRatePercentage}
@@ -124,31 +117,25 @@ function App() {
           }}
         />
 
-        <div className="field">
-          <label htmlFor="current-pot">Current Pension Pot (£)</label>
-          <input
-            id="current-pot"
-            type="number"
-            min={0}
-            value={inputs.currentPot}
-            onChange={(event) => {
-              updateInput('currentPot', parseNumberInput(event.target.value));
-            }}
-          />
-        </div>
+        <NumberField
+          id="current-pot"
+          label="Current Pension Pot (£)"
+          min={0}
+          value={inputs.currentPot}
+          onChange={(value) => {
+            updateInput('currentPot', value);
+          }}
+        />
 
-        <div className="field">
-          <label htmlFor="salary">Salary (£/yr)</label>
-          <input
-            id="salary"
-            type="number"
-            min={0}
-            value={inputs.salary}
-            onChange={(event) => {
-              updateInput('salary', parseNumberInput(event.target.value));
-            }}
-          />
-        </div>
+        <NumberField
+          id="salary"
+          label="Salary (£/yr)"
+          min={0}
+          value={inputs.salary}
+          onChange={(value) => {
+            updateInput('salary', value);
+          }}
+        />
 
         <ContributionField
           id="your-contribution"
@@ -170,19 +157,27 @@ function App() {
           }}
         />
 
-        <div className="field">
-          <label htmlFor="inflation-rate">Inflation Rate (%)</label>
-          <input
-            id="inflation-rate"
-            type="number"
-            min={0}
-            step={0.1}
-            value={inputs.inflationRatePercentage}
-            onChange={(event) => {
-              updateInput('inflationRatePercentage', parseNumberInput(event.target.value));
-            }}
-          />
-        </div>
+        <NumberField
+          id="inflation-rate"
+          label="Inflation Rate (%)"
+          min={0}
+          step={0.1}
+          value={inputs.inflationRatePercentage}
+          onChange={(value) => {
+            updateInput('inflationRatePercentage', value);
+          }}
+        />
+
+        <NumberField
+          id="pension-charges"
+          label="Pension Charges (%/yr)"
+          min={0}
+          step={0.05}
+          value={inputs.pensionChargesPercentage}
+          onChange={(value) => {
+            updateInput('pensionChargesPercentage', value);
+          }}
+        />
       </form>
 
       <OutputsSummary outputs={outputs} />
@@ -196,7 +191,7 @@ function App() {
           <input
             id="snapshot-label"
             type="text"
-            placeholder={`Scenario ${String(snapshots.length + 1)}`}
+            placeholder={`Snapshot ${String(snapshots.length + 1)}`}
             value={snapshotLabel}
             onChange={(event) => {
               setSnapshotLabel(event.target.value);

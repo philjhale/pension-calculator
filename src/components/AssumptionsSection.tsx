@@ -1,4 +1,8 @@
-import { ANNUITY_RATE, STATE_PENSION_ANNUAL } from '../calculator/constants';
+import {
+  ANNUITY_RATE,
+  DEFAULT_PENSION_CHARGES_PERCENTAGE,
+  STATE_PENSION_ANNUAL,
+} from '../calculator/constants';
 import { formatCurrency } from '../format';
 
 export function AssumptionsSection() {
@@ -15,6 +19,11 @@ export function AssumptionsSection() {
           State Pension, if enabled, adds a flat {formatCurrency(STATE_PENSION_ANNUAL)}/yr (the
           current full new State Pension) from your chosen retirement age — there's no separate
           State Pension age modelled.
+        </li>
+        <li>
+          Pension Charges, defaulting to {DEFAULT_PENSION_CHARGES_PERCENTAGE}%/yr but editable,
+          are deducted from the whole pot at the end of each year, after that year&apos;s growth
+          and Contributions are applied.
         </li>
         <li>
           Growth Rate is applied as a nominal rate year-on-year, then the Pot Value, Lump Sum,

@@ -13,6 +13,7 @@ const baseInputs: PensionProjectionInputs = {
   employerContributionPercentage: 0,
   salary: 0,
   inflationRatePercentage: 2.6,
+  pensionChargesPercentage: 0,
 };
 
 describe('calculatePensionProjection', () => {
@@ -47,6 +48,30 @@ describe('calculatePensionProjection', () => {
       });
 
       expect(Math.abs(outputs.incomePerYear - 12548) / 12548).toBeLessThan(0.01);
+    });
+
+    it('matches a real multi-year MoneyHelper projection (within 1%)', () => {
+      // MoneyHelper reference: age 43 -> 68, £300k pot, £100k salary, 5% gross (£5,000/yr) +
+      // 3% employer (£3,000/yr) contributions, 5% growth, 2.5% inflation, 0.75%/yr pension
+      // charges, no lump sum. Result: £12,548/yr State Pension + £27,422/yr Pot Income =
+      // £39,970/yr Estimated Income. This is the first fixture to exercise a multi-year
+      // accumulation with non-zero growth, inflation, and charges together (see ADR-0003,
+      // ADR-0004) rather than the zero-year/zero-growth edge cases above.
+      const outputs = calculatePensionProjection({
+        currentAge: 43,
+        retirementAge: 68,
+        statePensionEnabled: true,
+        lumpSumPercentage: 0,
+        growthRatePercentage: 5,
+        currentPot: 300000,
+        yourContributionPercentage: 5,
+        employerContributionPercentage: 3,
+        salary: 100000,
+        inflationRatePercentage: 2.5,
+        pensionChargesPercentage: 0.75,
+      });
+
+      expect(Math.abs(outputs.incomePerYear - 39970) / 39970).toBeLessThan(0.01);
     });
   });
 

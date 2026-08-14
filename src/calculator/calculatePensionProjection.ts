@@ -16,15 +16,18 @@ export function calculatePensionProjection(
   const yearsToRetirement = Math.max(inputs.retirementAge - inputs.currentAge, 0);
   const growthRate = inputs.growthRatePercentage / 100;
   const inflationRate = inputs.inflationRatePercentage / 100;
+  const chargesRate = inputs.pensionChargesPercentage / 100;
   const contributionRate =
     (inputs.yourContributionPercentage + inputs.employerContributionPercentage) / 100;
 
   let pot = inputs.currentPot;
   let salary = inputs.salary;
 
+  // Charges are taken off the whole pot at year-end, after that year's growth and
+  // contribution — see ADR-0004.
   for (let year = 0; year < yearsToRetirement; year++) {
     const contribution = contributionRate * salary;
-    pot = pot * (1 + growthRate) + contribution;
+    pot = (pot * (1 + growthRate) + contribution) * (1 - chargesRate);
     salary = salary * (1 + inflationRate);
   }
 
