@@ -31,3 +31,7 @@ _Avoid_: Drawdown income
 **Snapshot**:
 A frozen, user-labelled copy of every input and every calculated output at the moment it was saved, added to the comparison table. Independently reproducible — nothing in a Snapshot changes if the live calculator's inputs later change.
 _Avoid_: Scenario record, save, entry
+
+**Preset**:
+A named combination of Growth Rate, Contribution percentages, and Lump Sum percentage that generates one Snapshot per Lump Sum value when triggered. Distinct from a Snapshot — a Preset produces Snapshots, it isn't one itself.
+_Avoid_: Template, scenario
