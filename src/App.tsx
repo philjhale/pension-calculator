@@ -78,6 +78,12 @@ function App() {
     setSnapshots((current) => [...current, ...generatePresetSnapshots(inputs)]);
   }
 
+  function removeAllSnapshots() {
+    if (snapshots.length === 0) return;
+    if (!window.confirm('Remove all snapshots? This cannot be undone.')) return;
+    setSnapshots([]);
+  }
+
   return (
     <>
       <main>
@@ -230,6 +236,13 @@ function App() {
             </button>
             <button type="button" onClick={generatePresets}>
               Generate Presets
+            </button>
+            <button
+              type="button"
+              onClick={removeAllSnapshots}
+              disabled={snapshots.length === 0}
+            >
+              Remove All
             </button>
           </div>
         </div>
