@@ -72,6 +72,10 @@ function App() {
     setSnapshots((current) => current.filter((snapshot) => snapshot.id !== id));
   }
 
+  function reorderSnapshots(reordered: Snapshot[]) {
+    setSnapshots(reordered);
+  }
+
   return (
     <>
       <main>
@@ -224,7 +228,11 @@ function App() {
             </button>
           </div>
         </div>
-        <SnapshotTable snapshots={snapshots} onRemove={removeSnapshot} />
+        <SnapshotTable
+          snapshots={snapshots}
+          onRemove={removeSnapshot}
+          onReorder={reorderSnapshots}
+        />
       </section>
     </>
   );
