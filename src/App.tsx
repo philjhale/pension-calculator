@@ -3,6 +3,7 @@ import { calculatePensionProjection } from './calculator/calculatePensionProject
 import {
   DEFAULT_ANNUITY_RATE_PERCENTAGE,
   DEFAULT_PENSION_CHARGES_PERCENTAGE,
+  MIN_RETIREMENT_AGE,
 } from './calculator/constants';
 import type { PensionProjectionInputs } from './calculator/types';
 import { AnnuityRateField } from './components/AnnuityRateField';
@@ -92,7 +93,7 @@ function App() {
           <NumberField
             id="retirement-age"
             label="Retirement Age"
-            min={16}
+            min={MIN_RETIREMENT_AGE}
             max={100}
             value={inputs.retirementAge}
             onChange={(value) => {
