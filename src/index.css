@@ -347,6 +347,37 @@ button[aria-pressed='true'] {
   font-size: 13px;
 }
 
+.snapshot-table th.col-drag,
+.snapshot-table td.col-drag {
+  width: 28px;
+  padding: 8px 0;
+}
+
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: none;
+  border: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-handle svg {
+  width: 12px;
+  height: 20px;
+  fill: var(--text);
+}
+
+.snapshot-row.is-dragging {
+  opacity: 0.6;
+}
+
+.snapshot-row.is-dragging .drag-handle {
+  cursor: grabbing;
+}
+
 @media (max-width: 640px) {
   form,
   .outputs {
