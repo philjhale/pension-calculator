@@ -23,5 +23,8 @@ export const AVERAGE_PENSION_CHARGES_PERCENTAGE = 0.5;
 export const MIN_LUMP_SUM_PERCENTAGE = 0;
 export const MAX_LUMP_SUM_PERCENTAGE = 25;
 
+/** Normal Minimum Pension Age — the earliest age you can normally access a UK pension. */
+export const MIN_RETIREMENT_AGE = 55;
+
 export const MIN_ANNUITY_RATE_PERCENTAGE = 0;
 export const MAX_ANNUITY_RATE_PERCENTAGE = 20;
