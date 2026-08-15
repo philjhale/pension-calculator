@@ -17,28 +17,84 @@ function getSnapshotId(snapshot: Snapshot): string {
   return snapshot.id;
 }
 
-interface SnapshotRowProps {
+interface MetricRow {
+  label: string;
+  render: (snapshot: Snapshot) => React.ReactNode;
+}
+
+const METRIC_ROWS: MetricRow[] = [
+  {
+    label: 'Ages',
+    render: (s) => `${String(s.inputs.currentAge)} → ${String(s.inputs.retirementAge)}`,
+  },
+  {
+    label: 'State Pension',
+    render: (s) => (s.inputs.statePensionEnabled ? 'Yes' : 'No'),
+  },
+  { label: 'Salary', render: (s) => formatCurrency(s.inputs.salary) },
+  {
+    label: 'Contributions',
+    render: (s) =>
+      `${formatPercentage(s.inputs.yourContributionPercentage)} / ${formatPercentage(s.inputs.employerContributionPercentage)}`,
+  },
+  {
+    label: 'Growth Rate',
+    render: (s) => formatPercentage(s.inputs.growthRatePercentage),
+  },
+  {
+    label: 'Inflation',
+    render: (s) => formatPercentage(s.inputs.inflationRatePercentage),
+  },
+  {
+    label: 'Charges',
+    render: (s) => formatPercentage(s.inputs.pensionChargesPercentage),
+  },
+  {
+    label: 'Annuity Rate',
+    render: (s) => formatPercentage(s.inputs.annuityRatePercentage),
+  },
+  {
+    label: 'Total Pot Value',
+    render: (s) => formatCurrency(s.outputs.totalPotValue),
+  },
+  {
+    label: 'Lump Sum',
+    render: (s) =>
+      `${formatCurrency(s.outputs.lumpSumValue)} (${formatPercentage(s.inputs.lumpSumPercentage)})`,
+  },
+  { label: 'Pot Income', render: (s) => formatCurrency(s.outputs.potIncome) },
+  {
+    label: 'State Pension Income',
+    render: (s) => formatCurrency(s.outputs.statePensionIncome),
+  },
+  {
+    label: 'Income per Month',
+    render: (s) => formatCurrency(s.outputs.incomePerMonth),
+  },
+];
+
+interface SnapshotColumnHeaderProps {
   snapshot: Snapshot;
   isDragging: boolean;
-  registerRow: (id: string, row: HTMLElement | null) => void;
+  registerColumn: (id: string, column: HTMLElement | null) => void;
   startDrag: (id: string) => void;
-  moveItem: (id: string, direction: 'up' | 'down') => void;
+  moveItem: (id: string, direction: 'previous' | 'next') => void;
   onRemove: (id: string) => void;
 }
 
-const SnapshotRow = memo(function SnapshotRow({
+const SnapshotColumnHeader = memo(function SnapshotColumnHeader({
   snapshot,
   isDragging,
-  registerRow,
+  registerColumn,
   startDrag,
   moveItem,
   onRemove,
-}: SnapshotRowProps) {
-  const setRowRef = useCallback(
-    (row: HTMLTableRowElement | null) => {
-      registerRow(snapshot.id, row);
+}: SnapshotColumnHeaderProps) {
+  const setColumnRef = useCallback(
+    (column: HTMLTableCellElement | null) => {
+      registerColumn(snapshot.id, column);
     },
-    [registerRow, snapshot.id],
+    [registerColumn, snapshot.id],
   );
 
   const handlePointerDown = useCallback(
@@ -54,11 +110,11 @@ const SnapshotRow = memo(function SnapshotRow({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
         return;
       }
       event.preventDefault();
-      moveItem(snapshot.id, event.key === 'ArrowUp' ? 'up' : 'down');
+      moveItem(snapshot.id, event.key === 'ArrowLeft' ? 'previous' : 'next');
     },
     [moveItem, snapshot.id],
   );
@@ -68,56 +124,35 @@ const SnapshotRow = memo(function SnapshotRow({
   }, [onRemove, snapshot.id]);
 
   return (
-    <tr
-      ref={setRowRef}
-      className={isDragging ? 'snapshot-row is-dragging' : 'snapshot-row'}
+    <th
+      ref={setColumnRef}
+      className={
+        isDragging ? 'snapshot-column is-dragging' : 'snapshot-column'
+      }
     >
-      <td className="col-drag">
+      <div className="snapshot-column-header">
         <button
           type="button"
           className="drag-handle"
-          aria-label={`Reorder ${snapshot.label}. Use the up and down arrow keys to move.`}
+          aria-label={`Reorder ${snapshot.label}. Use the left and right arrow keys to move.`}
           onPointerDown={handlePointerDown}
           onKeyDown={handleKeyDown}
         >
-          <svg viewBox="0 0 12 20" aria-hidden="true">
+          <svg viewBox="0 0 20 12" aria-hidden="true">
             <circle cx="4" cy="4" r="1.5" />
-            <circle cx="4" cy="10" r="1.5" />
-            <circle cx="4" cy="16" r="1.5" />
-            <circle cx="8" cy="4" r="1.5" />
-            <circle cx="8" cy="10" r="1.5" />
-            <circle cx="8" cy="16" r="1.5" />
+            <circle cx="10" cy="4" r="1.5" />
+            <circle cx="16" cy="4" r="1.5" />
+            <circle cx="4" cy="8" r="1.5" />
+            <circle cx="10" cy="8" r="1.5" />
+            <circle cx="16" cy="8" r="1.5" />
           </svg>
         </button>
-      </td>
-      <td className="col-label">{snapshot.label}</td>
-      <td>
-        {snapshot.inputs.currentAge} → {snapshot.inputs.retirementAge}
-      </td>
-      <td>{snapshot.inputs.statePensionEnabled ? 'Yes' : 'No'}</td>
-      <td>{formatCurrency(snapshot.inputs.salary)}</td>
-      <td>
-        {formatPercentage(snapshot.inputs.yourContributionPercentage)} /{' '}
-        {formatPercentage(snapshot.inputs.employerContributionPercentage)}
-      </td>
-      <td>{formatPercentage(snapshot.inputs.growthRatePercentage)}</td>
-      <td>{formatPercentage(snapshot.inputs.inflationRatePercentage)}</td>
-      <td>{formatPercentage(snapshot.inputs.pensionChargesPercentage)}</td>
-      <td>{formatPercentage(snapshot.inputs.annuityRatePercentage)}</td>
-      <td>{formatCurrency(snapshot.outputs.totalPotValue)}</td>
-      <td>
-        {formatCurrency(snapshot.outputs.lumpSumValue)} (
-        {formatPercentage(snapshot.inputs.lumpSumPercentage)})
-      </td>
-      <td>{formatCurrency(snapshot.outputs.potIncome)}</td>
-      <td>{formatCurrency(snapshot.outputs.statePensionIncome)}</td>
-      <td>{formatCurrency(snapshot.outputs.incomePerMonth)}</td>
-      <td>
+        <span className="snapshot-column-label">{snapshot.label}</span>
         <button type="button" onClick={handleRemove}>
           Remove
         </button>
-      </td>
-    </tr>
+      </div>
+    </th>
   );
 });
 
@@ -127,7 +162,7 @@ export function SnapshotTable({
   onReorder,
 }: SnapshotTableProps) {
   const { draggingId, displayedItems, registerRow, startDrag, moveItem } =
-    useDragReorder(snapshots, getSnapshotId, onReorder);
+    useDragReorder(snapshots, getSnapshotId, onReorder, 'horizontal');
 
   if (snapshots.length === 0) {
     return null;
@@ -139,35 +174,28 @@ export function SnapshotTable({
         <table className="snapshot-table">
           <thead>
             <tr>
-              <th className="col-drag"></th>
-              <th className="col-label">Snapshot</th>
-              <th>Ages</th>
-              <th>State Pension</th>
-              <th>Salary</th>
-              <th>Contributions</th>
-              <th>Growth Rate</th>
-              <th>Inflation</th>
-              <th>Charges</th>
-              <th>Annuity Rate</th>
-              <th>Total Pot Value</th>
-              <th>Lump Sum</th>
-              <th>Pot Income</th>
-              <th>State Pension Income</th>
-              <th>Income per Month</th>
-              <th></th>
+              <th className="col-label"></th>
+              {displayedItems.map((snapshot) => (
+                <SnapshotColumnHeader
+                  key={snapshot.id}
+                  snapshot={snapshot}
+                  isDragging={snapshot.id === draggingId}
+                  registerColumn={registerRow}
+                  startDrag={startDrag}
+                  moveItem={moveItem}
+                  onRemove={onRemove}
+                />
+              ))}
             </tr>
           </thead>
           <tbody>
-            {displayedItems.map((snapshot) => (
-              <SnapshotRow
-                key={snapshot.id}
-                snapshot={snapshot}
-                isDragging={snapshot.id === draggingId}
-                registerRow={registerRow}
-                startDrag={startDrag}
-                moveItem={moveItem}
-                onRemove={onRemove}
-              />
+            {METRIC_ROWS.map((row) => (
+              <tr key={row.label}>
+                <td className="col-label">{row.label}</td>
+                {displayedItems.map((snapshot) => (
+                  <td key={snapshot.id}>{row.render(snapshot)}</td>
+                ))}
+              </tr>
             ))}
           </tbody>
         </table>

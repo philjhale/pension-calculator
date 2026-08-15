@@ -10,18 +10,21 @@ interface UseDragReorderResult<T> {
   displayedItems: T[];
   registerRow: (id: string, row: HTMLElement | null) => void;
   startDrag: (id: string) => void;
-  moveItem: (id: string, direction: 'up' | 'down') => void;
+  moveItem: (id: string, direction: 'previous' | 'next') => void;
 }
 
 /**
- * Drag-to-reorder for a list rendered as one row per item, using Pointer
- * Events so both mouse and touch dragging work. `onReorder` is only called
- * once, when the drag ends, not on every pointer move.
+ * Drag-to-reorder for a list rendered as one row (or column) per item, using
+ * Pointer Events so both mouse and touch dragging work. `onReorder` is only
+ * called once, when the drag ends, not on every pointer move. `axis`
+ * controls whether position is compared vertically (rows) or horizontally
+ * (columns).
  */
 export function useDragReorder<T>(
   items: T[],
   getId: (item: T) => string,
   onReorder: (items: T[]) => void,
+  axis: 'vertical' | 'horizontal' = 'vertical',
 ): UseDragReorderResult<T> {
   const [drag, setDrag] = useState<DragState<T> | null>(null);
   const rowRefs = useRef(new Map<string, HTMLElement>());
@@ -49,12 +52,12 @@ export function useDragReorder<T>(
     setDrag({ id, order: itemsRef.current });
   }, []);
 
-  const moveItem = useCallback((id: string, direction: 'up' | 'down') => {
+  const moveItem = useCallback((id: string, direction: 'previous' | 'next') => {
     const currentItems = itemsRef.current;
     const index = currentItems.findIndex(
       (item) => getIdRef.current(item) === id,
     );
-    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    const targetIndex = direction === 'previous' ? index - 1 : index + 1;
     if (index === -1 || targetIndex < 0 || targetIndex >= currentItems.length) {
       return;
     }
@@ -90,7 +93,9 @@ export function useDragReorder<T>(
             return false;
           }
           const rect = row.getBoundingClientRect();
-          return event.clientY < rect.top + rect.height / 2;
+          return axis === 'horizontal'
+            ? event.clientX < rect.left + rect.width / 2
+            : event.clientY < rect.top + rect.height / 2;
         });
         const resolvedTargetIndex =
           targetIndex === -1 ? current.order.length - 1 : targetIndex;
@@ -145,7 +150,7 @@ export function useDragReorder<T>(
         frameRef.current = null;
       }
     };
-  }, [isDragging]);
+  }, [isDragging, axis]);
 
   return {
     draggingId: drag?.id ?? null,
