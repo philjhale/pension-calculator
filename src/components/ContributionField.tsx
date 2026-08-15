@@ -1,4 +1,5 @@
-import { formatCurrency, parseNumberInput } from '../format';
+import { formatCurrency } from '../format';
+import { useNumberInput } from '../hooks/useNumberInput';
 
 interface ContributionFieldProps {
   id: string;
@@ -16,6 +17,7 @@ export function ContributionField({
   onChange,
 }: ContributionFieldProps) {
   const monthlyAmount = ((percentage / 100) * salary) / 12;
+  const { text, handleChange } = useNumberInput(percentage, onChange);
 
   return (
     <div className="field">
@@ -27,10 +29,8 @@ export function ContributionField({
           min={0}
           max={100}
           step={0.5}
-          value={percentage}
-          onChange={(event) => {
-            onChange(parseNumberInput(event.target.value));
-          }}
+          value={text}
+          onChange={handleChange}
         />
         <output>{formatCurrency(monthlyAmount)}/month</output>
       </div>
