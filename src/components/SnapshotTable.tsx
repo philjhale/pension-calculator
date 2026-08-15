@@ -112,8 +112,8 @@ const SnapshotRow = memo(function SnapshotRow({
       <td>{formatCurrency(snapshot.outputs.potIncome)}</td>
       <td>{formatCurrency(snapshot.outputs.statePensionIncome)}</td>
       <td>
-        {formatCurrency(snapshot.outputs.incomePerMonth)} p/m,{' '}
-        {formatCurrency(snapshot.outputs.incomePerYear)} p/a
+        {formatCurrency(snapshot.outputs.incomePerMonth)},{' '}
+        {formatCurrency(snapshot.outputs.incomePerYear)}
       </td>
       <td>
         <button type="button" onClick={handleRemove}>
