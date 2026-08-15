@@ -1,4 +1,4 @@
-import { parseNumberInput } from '../format';
+import { useNumberInput } from '../hooks/useNumberInput';
 
 interface NumberFieldProps {
   id: string;
@@ -11,6 +11,8 @@ interface NumberFieldProps {
 }
 
 export function NumberField({ id, label, value, onChange, min, max, step }: NumberFieldProps) {
+  const { text, handleChange } = useNumberInput(value, onChange);
+
   return (
     <div className="field">
       <label htmlFor={id}>{label}</label>
@@ -20,10 +22,8 @@ export function NumberField({ id, label, value, onChange, min, max, step }: Numb
         min={min}
         max={max}
         step={step}
-        value={value}
-        onChange={(event) => {
-          onChange(parseNumberInput(event.target.value));
-        }}
+        value={text}
+        onChange={handleChange}
       />
     </div>
   );

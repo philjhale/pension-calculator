@@ -4,7 +4,7 @@ import {
   MIN_ANNUITY_RATE_PERCENTAGE,
   MONEYHELPER_ANNUITY_RATE_PERCENTAGE,
 } from '../calculator/constants';
-import { parseNumberInput } from '../format';
+import { useNumberInput } from '../hooks/useNumberInput';
 
 const PRESETS = [
   { label: 'Vanguard', value: DEFAULT_ANNUITY_RATE_PERCENTAGE },
@@ -17,6 +17,8 @@ interface AnnuityRateFieldProps {
 }
 
 export function AnnuityRateField({ value, onChange }: AnnuityRateFieldProps) {
+  const { text, handleChange } = useNumberInput(value, onChange);
+
   return (
     <div className="field">
       <label htmlFor="annuity-rate">Annuity Rate (%)</label>
@@ -26,10 +28,8 @@ export function AnnuityRateField({ value, onChange }: AnnuityRateFieldProps) {
         min={MIN_ANNUITY_RATE_PERCENTAGE}
         max={MAX_ANNUITY_RATE_PERCENTAGE}
         step={0.01}
-        value={value}
-        onChange={(event) => {
-          onChange(parseNumberInput(event.target.value));
-        }}
+        value={text}
+        onChange={handleChange}
       />
       <div className="preset-buttons">
         {PRESETS.map((preset) => (

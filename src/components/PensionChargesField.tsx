@@ -3,7 +3,7 @@ import {
   DEFAULT_PENSION_CHARGES_PERCENTAGE,
   VANGUARD_PENSION_CHARGES_PERCENTAGE,
 } from '../calculator/constants';
-import { parseNumberInput } from '../format';
+import { useNumberInput } from '../hooks/useNumberInput';
 
 const PRESETS = [
   { label: 'Vanguard', value: VANGUARD_PENSION_CHARGES_PERCENTAGE },
@@ -17,6 +17,8 @@ interface PensionChargesFieldProps {
 }
 
 export function PensionChargesField({ value, onChange }: PensionChargesFieldProps) {
+  const { text, handleChange } = useNumberInput(value, onChange);
+
   return (
     <div className="field">
       <label htmlFor="pension-charges">Pension Charges (%/yr)</label>
@@ -25,10 +27,8 @@ export function PensionChargesField({ value, onChange }: PensionChargesFieldProp
         type="number"
         min={0}
         step={0.05}
-        value={value}
-        onChange={(event) => {
-          onChange(parseNumberInput(event.target.value));
-        }}
+        value={text}
+        onChange={handleChange}
       />
       <div className="preset-buttons">
         {PRESETS.map((preset) => (
