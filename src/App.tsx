@@ -15,6 +15,7 @@ import { OutputsSummary } from './components/OutputsSummary';
 import { PensionChargesField } from './components/PensionChargesField';
 import { SnapshotTable } from './components/SnapshotTable';
 import { loadInputs, saveInputs } from './config/storage';
+import { generatePresetSnapshots } from './snapshot/presets';
 import { loadSnapshots, saveSnapshots } from './snapshot/storage';
 import type { Snapshot } from './snapshot/types';
 
@@ -72,6 +73,10 @@ function App() {
   const removeSnapshot = useCallback((id: string) => {
     setSnapshots((current) => current.filter((snapshot) => snapshot.id !== id));
   }, []);
+
+  function generatePresets() {
+    setSnapshots((current) => [...current, ...generatePresetSnapshots(inputs)]);
+  }
 
   return (
     <>
@@ -222,6 +227,9 @@ function App() {
             />
             <button type="button" onClick={saveSnapshot}>
               Save Snapshot
+            </button>
+            <button type="button" onClick={generatePresets}>
+              Generate Presets
             </button>
           </div>
         </div>
