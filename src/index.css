@@ -300,6 +300,67 @@ button[aria-pressed='true'] {
   box-sizing: border-box;
 }
 
+.snapshot-table-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 6px;
+}
+
+.expand-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.expand-button svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--text);
+}
+
+.snapshot-table-dialog {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  margin: 0;
+  padding: 24px;
+  box-sizing: border-box;
+  border: none;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.snapshot-table-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.snapshot-table-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.snapshot-table-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.snapshot-table-dialog-header h2 {
+  margin: 0;
+}
+
+.snapshot-table-dialog .snapshot-table-scroll-inner {
+  flex: 1;
+  overflow-y: auto;
+}
+
 .snapshot-table-scroll-inner {
   overflow-x: auto;
   overflow-y: hidden;
