@@ -22,6 +22,8 @@ Always fill out `.github/PULL_REQUEST_TEMPLATE.md` in full (Summary, Details, Te
 
 Before opening a PR, run the `code-reviewer` subagent (`.claude/agents/code-reviewer.md`) against the diff and address its findings, or note in the PR why a finding wasn't addressed.
 
+Once a change is committed and reviewed, open the PR (`gh pr create`) without asking for confirmation first.
+
 ### UI verification
 
 Verify UI changes by running them and posting a screenshot or video in the chat — screenshot for simple visual changes, video for interactive features. See `docs/agents/ui-verification.md`.
