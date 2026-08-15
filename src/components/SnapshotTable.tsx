@@ -111,7 +111,10 @@ const SnapshotRow = memo(function SnapshotRow({
       </td>
       <td>{formatCurrency(snapshot.outputs.potIncome)}</td>
       <td>{formatCurrency(snapshot.outputs.statePensionIncome)}</td>
-      <td>{formatCurrency(snapshot.outputs.incomePerMonth)}</td>
+      <td>
+        {formatCurrency(snapshot.outputs.incomePerMonth)},{' '}
+        {formatCurrency(snapshot.outputs.incomePerYear)}
+      </td>
       <td>
         <button type="button" onClick={handleRemove}>
           Remove
@@ -170,7 +173,7 @@ export function SnapshotTable({
           <th className="col-label">Snapshot</th>
           <th>Ages</th>
           <th>State Pension</th>
-          <th>Salary</th>
+          <th>Salary (p/a)</th>
           <th>Contributions</th>
           <th>Growth Rate</th>
           <th>Inflation</th>
@@ -178,9 +181,9 @@ export function SnapshotTable({
           <th>Annuity Rate</th>
           <th>Total Pot Value</th>
           <th>Lump Sum</th>
-          <th>Pot Income</th>
-          <th>State Pension Income</th>
-          <th>Income per Month</th>
+          <th>Pot Income (p/a)</th>
+          <th>State Pension Income (p/a)</th>
+          <th>Gross Income (p/m, p/a)</th>
           <th></th>
         </tr>
       </thead>
