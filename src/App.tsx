@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { calculatePensionProjection } from './calculator/calculatePensionProjection';
 import {
   DEFAULT_ANNUITY_RATE_PERCENTAGE,
@@ -68,13 +68,9 @@ function App() {
     setSnapshotLabel('');
   }
 
-  function removeSnapshot(id: string) {
+  const removeSnapshot = useCallback((id: string) => {
     setSnapshots((current) => current.filter((snapshot) => snapshot.id !== id));
-  }
-
-  function reorderSnapshots(reordered: Snapshot[]) {
-    setSnapshots(reordered);
-  }
+  }, []);
 
   return (
     <>
@@ -231,7 +227,7 @@ function App() {
         <SnapshotTable
           snapshots={snapshots}
           onRemove={removeSnapshot}
-          onReorder={reorderSnapshots}
+          onReorder={setSnapshots}
         />
       </section>
     </>
