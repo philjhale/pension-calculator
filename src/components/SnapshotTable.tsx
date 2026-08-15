@@ -112,7 +112,7 @@ const SnapshotRow = memo(function SnapshotRow({
       <td>{formatCurrency(snapshot.outputs.potIncome)}</td>
       <td>{formatCurrency(snapshot.outputs.statePensionIncome)}</td>
       <td>
-        {formatCurrency(snapshot.outputs.incomePerMonth)},{' '}
+        {formatCurrency(snapshot.outputs.incomePerMonth)} /{' '}
         {formatCurrency(snapshot.outputs.incomePerYear)}
       </td>
       <td>
@@ -183,7 +183,7 @@ export function SnapshotTable({
           <th>Lump Sum</th>
           <th>Pot Income (p/a)</th>
           <th>State Pension Income (p/a)</th>
-          <th>Gross Income (p/m, p/a)</th>
+          <th>Gross Income (p/m - p/a)</th>
           <th></th>
         </tr>
       </thead>
