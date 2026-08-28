@@ -156,7 +156,7 @@ main {
 }
 
 .card {
-  background: var(--input-bg);
+  background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px;
@@ -343,7 +343,7 @@ button.primary:hover {
   padding: 16px 20px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: var(--input-bg);
+  background: var(--card-bg);
 }
 
 .assumptions summary {
