@@ -116,15 +116,10 @@ const SnapshotRow = memo(function SnapshotRow({
         <>
           <td>{formatCurrency(snapshot.inputs.currentPot)}</td>
           <td>{formatCurrency(snapshot.inputs.salary)}</td>
-          <td>
-            {snapshot.inputs.statePensionEnabled
-              ? formatCurrency(snapshot.outputs.statePensionIncome)
-              : 'Not included'}
-          </td>
+          <td>{snapshot.inputs.statePensionEnabled ? 'Included' : 'Not included'}</td>
           <td>{formatPercentage(snapshot.inputs.pensionChargesPercentage)}</td>
           <td>{formatPercentage(snapshot.inputs.inflationRatePercentage)}</td>
           <td>{formatPercentage(snapshot.inputs.annuityRatePercentage)}</td>
-          <td>{formatCurrency(snapshot.outputs.lumpSumValue)}</td>
           <td>{formatCurrency(snapshot.outputs.potIncome)}</td>
           <td>{formatCurrency(snapshot.outputs.statePensionIncome)}</td>
         </>
@@ -204,7 +199,6 @@ export function SnapshotTable({
               <th>Charges</th>
               <th>Inflation</th>
               <th>Annuity Rate</th>
-              <th>Lump Sum Value</th>
               <th>Pot Income (p/a)</th>
               <th>State Pension Income (p/a)</th>
             </>
