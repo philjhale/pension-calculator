@@ -236,6 +236,7 @@ export function SnapshotTable({
             <svg viewBox="0 0 16 16" aria-hidden="true">
               <path d="M1 1h6v1.5H2.5V6H1V1zm14 0v6h-1.5V2.5H10V1h6zM1 15V9h1.5v4.5H6V15H1zm14 0h-6v-1.5h4.5V9H15v6z" />
             </svg>
+            Expand
           </button>
         </div>
         <div className="snapshot-table-scroll-inner">{!shouldShowDialog && table}</div>
@@ -257,6 +258,7 @@ export function SnapshotTable({
             <svg viewBox="0 0 16 16" aria-hidden="true">
               <path d="M3.5 2.5 8 7l4.5-4.5 1 1L9 8l4.5 4.5-1 1L8 9l-4.5 4.5-1-1L7 8 2.5 3.5z" />
             </svg>
+            Close
           </button>
         </div>
         <div className="snapshot-table-scroll-inner">{shouldShowDialog && table}</div>

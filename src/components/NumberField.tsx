@@ -8,13 +8,23 @@ interface NumberFieldProps {
   min?: number;
   max?: number;
   step?: number;
+  fullWidth?: boolean;
 }
 
-export function NumberField({ id, label, value, onChange, min, max, step }: NumberFieldProps) {
+export function NumberField({
+  id,
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  step,
+  fullWidth,
+}: NumberFieldProps) {
   const { text, handleChange } = useNumberInput(value, onChange);
 
   return (
-    <div className="field">
+    <div className={fullWidth ? 'field field-full' : 'field'}>
       <label htmlFor={id}>{label}</label>
       <input
         id={id}

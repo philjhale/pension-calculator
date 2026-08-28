@@ -139,6 +139,7 @@ function App() {
                   label="Lump Sum (%, capped at 25)"
                   min={0}
                   max={25}
+                  fullWidth
                   value={inputs.lumpSumPercentage}
                   onChange={(value) => {
                     updateInput('lumpSumPercentage', value);
@@ -216,6 +217,7 @@ function App() {
                   label="Inflation Rate (%)"
                   min={0}
                   step={0.1}
+                  fullWidth
                   value={inputs.inflationRatePercentage}
                   onChange={(value) => {
                     updateInput('inflationRatePercentage', value);
@@ -258,9 +260,15 @@ function App() {
               }}
             />
             <button type="button" className="primary" onClick={saveSnapshot}>
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2z" />
+              </svg>
               Save Snapshot
             </button>
             <button type="button" onClick={generatePresets}>
+              <svg viewBox="0 0 16 14" aria-hidden="true">
+                <path d="M8 0l1.6 5.4L15 7l-5.4 1.6L8 14l-1.6-5.4L1 7l5.4-1.6L8 0z" />
+              </svg>
               Generate Presets
             </button>
             <button
@@ -268,6 +276,9 @@ function App() {
               onClick={removeAllSnapshots}
               disabled={snapshots.length === 0}
             >
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zM4.118 4h7.764L11.882 4H4.118zM4 13V4.06l.118-.06h7.764l.118.06V13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" />
+              </svg>
               Remove All
             </button>
           </div>

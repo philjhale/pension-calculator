@@ -216,7 +216,43 @@ main {
   color: var(--text-h);
 }
 
-.field:has(input[type='range']) {
+.field-checkbox input[type='checkbox'] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--input-bg);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.field-checkbox input[type='checkbox']:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.field-checkbox input[type='checkbox']:checked::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.field-checkbox input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 1px;
+}
+
+.field:has(input[type='range']),
+.field:has(.preset-buttons),
+.field-full {
   grid-column: 1 / -1;
 }
 
@@ -243,6 +279,9 @@ main {
 }
 
 button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font: inherit;
   font-size: 14px;
   padding: 10px 20px;
@@ -251,6 +290,13 @@ button {
   background: var(--input-bg);
   color: var(--text-h);
   cursor: pointer;
+}
+
+button svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  flex: none;
 }
 
 button:hover {
@@ -332,6 +378,14 @@ button.primary:hover {
   box-sizing: border-box;
 }
 
+.snapshots-header h2 {
+  font-family: var(--heading);
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin: 0 0 24px;
+}
+
 .snapshot-save {
   flex-direction: row;
   align-items: end;
@@ -362,14 +416,8 @@ button.primary:hover {
 }
 
 .expand-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px;
+  padding: 6px 14px;
   background: none;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
 }
 
 .expand-button svg {
