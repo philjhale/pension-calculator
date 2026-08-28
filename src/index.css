@@ -156,7 +156,7 @@ main {
 }
 
 .card {
-  background: var(--card-bg);
+  background: var(--input-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px;
@@ -343,7 +343,7 @@ button.primary:hover {
   padding: 16px 20px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: var(--card-bg);
+  background: var(--input-bg);
 }
 
 .assumptions summary {
@@ -469,6 +469,7 @@ button.primary:hover {
   overflow-y: hidden;
   border: 1px solid var(--border);
   border-radius: 8px;
+  background: var(--input-bg);
 }
 
 .snapshot-table {
@@ -491,8 +492,10 @@ button.primary:hover {
 
 .snapshot-table th {
   color: var(--text);
-  font-weight: 500;
-  font-size: 13px;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   white-space: normal;
 }
 
@@ -500,10 +503,13 @@ button.primary:hover {
 .snapshot-table td.col-label {
   position: sticky;
   left: 0;
-  background: var(--bg);
-  color: var(--text-h);
-  font-weight: 500;
+  background: var(--input-bg);
   box-shadow: 1px 0 0 var(--border);
+}
+
+.snapshot-table td.col-label {
+  color: var(--text-h);
+  font-weight: 700;
 }
 
 .snapshot-table button {
