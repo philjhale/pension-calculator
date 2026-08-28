@@ -89,128 +89,148 @@ function App() {
       <main>
         <h1>Pension Calculator</h1>
 
-        <form>
-          <NumberField
-            id="current-age"
-            label="Current Age"
-            min={16}
-            max={100}
-            value={inputs.currentAge}
-            onChange={(value) => {
-              updateInput('currentAge', value);
-            }}
-          />
+        <div className="layout">
+          <form className="layout-left">
+            <section className="card">
+              <h2 className="eyebrow">Basics</h2>
+              <div className="card-fields">
+                <NumberField
+                  id="current-age"
+                  label="Current Age"
+                  min={16}
+                  max={100}
+                  value={inputs.currentAge}
+                  onChange={(value) => {
+                    updateInput('currentAge', value);
+                  }}
+                />
 
-          <NumberField
-            id="retirement-age"
-            label="Retirement Age"
-            min={MIN_RETIREMENT_AGE}
-            max={100}
-            value={inputs.retirementAge}
-            onChange={(value) => {
-              updateInput('retirementAge', value);
-            }}
-          />
+                <NumberField
+                  id="retirement-age"
+                  label="Retirement Age"
+                  min={MIN_RETIREMENT_AGE}
+                  max={100}
+                  value={inputs.retirementAge}
+                  onChange={(value) => {
+                    updateInput('retirementAge', value);
+                  }}
+                />
 
-          <div className="field field-checkbox">
-            <label htmlFor="state-pension">
-              <input
-                id="state-pension"
-                type="checkbox"
-                checked={inputs.statePensionEnabled}
-                onChange={(event) => {
-                  updateInput('statePensionEnabled', event.target.checked);
-                }}
-              />
-              I&apos;ll receive the State Pension
-            </label>
-          </div>
+                <div className="field field-checkbox">
+                  <label htmlFor="state-pension">
+                    <input
+                      id="state-pension"
+                      type="checkbox"
+                      checked={inputs.statePensionEnabled}
+                      onChange={(event) => {
+                        updateInput('statePensionEnabled', event.target.checked);
+                      }}
+                    />
+                    I&apos;ll receive the State Pension
+                  </label>
+                </div>
 
-          <NumberField
-            id="lump-sum"
-            label="Lump Sum (%, capped at 25)"
-            min={0}
-            max={25}
-            value={inputs.lumpSumPercentage}
-            onChange={(value) => {
-              updateInput('lumpSumPercentage', value);
-            }}
-          />
+                <NumberField
+                  id="lump-sum"
+                  label="Lump Sum (%, capped at 25)"
+                  min={0}
+                  max={25}
+                  value={inputs.lumpSumPercentage}
+                  onChange={(value) => {
+                    updateInput('lumpSumPercentage', value);
+                  }}
+                />
 
-          <GrowthRateSlider
-            value={inputs.growthRatePercentage}
-            onChange={(value) => {
-              updateInput('growthRatePercentage', value);
-            }}
-          />
+                <NumberField
+                  id="current-pot"
+                  label="Current Pension Pot (£)"
+                  min={0}
+                  value={inputs.currentPot}
+                  onChange={(value) => {
+                    updateInput('currentPot', value);
+                  }}
+                />
 
-          <NumberField
-            id="current-pot"
-            label="Current Pension Pot (£)"
-            min={0}
-            value={inputs.currentPot}
-            onChange={(value) => {
-              updateInput('currentPot', value);
-            }}
-          />
+                <NumberField
+                  id="salary"
+                  label="Salary (£/yr)"
+                  min={0}
+                  value={inputs.salary}
+                  onChange={(value) => {
+                    updateInput('salary', value);
+                  }}
+                />
+              </div>
+            </section>
 
-          <NumberField
-            id="salary"
-            label="Salary (£/yr)"
-            min={0}
-            value={inputs.salary}
-            onChange={(value) => {
-              updateInput('salary', value);
-            }}
-          />
+            <section className="card">
+              <h2 className="eyebrow">Contributions</h2>
+              <div className="card-fields">
+                <ContributionField
+                  id="your-contribution"
+                  label="Your Contribution"
+                  percentage={inputs.yourContributionPercentage}
+                  salary={inputs.salary}
+                  onChange={(value) => {
+                    updateInput('yourContributionPercentage', value);
+                  }}
+                />
 
-          <ContributionField
-            id="your-contribution"
-            label="Your Contribution"
-            percentage={inputs.yourContributionPercentage}
-            salary={inputs.salary}
-            onChange={(value) => {
-              updateInput('yourContributionPercentage', value);
-            }}
-          />
+                <ContributionField
+                  id="employer-contribution"
+                  label="Employer Contribution"
+                  percentage={inputs.employerContributionPercentage}
+                  salary={inputs.salary}
+                  onChange={(value) => {
+                    updateInput('employerContributionPercentage', value);
+                  }}
+                />
 
-          <ContributionField
-            id="employer-contribution"
-            label="Employer Contribution"
-            percentage={inputs.employerContributionPercentage}
-            salary={inputs.salary}
-            onChange={(value) => {
-              updateInput('employerContributionPercentage', value);
-            }}
-          />
+                <GrowthRateSlider
+                  value={inputs.growthRatePercentage}
+                  onChange={(value) => {
+                    updateInput('growthRatePercentage', value);
+                  }}
+                />
+              </div>
+            </section>
 
-          <NumberField
-            id="inflation-rate"
-            label="Inflation Rate (%)"
-            min={0}
-            step={0.1}
-            value={inputs.inflationRatePercentage}
-            onChange={(value) => {
-              updateInput('inflationRatePercentage', value);
-            }}
-          />
+            <section className="card">
+              <h2 className="eyebrow">Charges &amp; Rates</h2>
+              <div className="card-fields">
+                <PensionChargesField
+                  value={inputs.pensionChargesPercentage}
+                  onChange={(value) => {
+                    updateInput('pensionChargesPercentage', value);
+                  }}
+                />
 
-          <PensionChargesField
-            value={inputs.pensionChargesPercentage}
-            onChange={(value) => {
-              updateInput('pensionChargesPercentage', value);
-            }}
-          />
+                <NumberField
+                  id="inflation-rate"
+                  label="Inflation Rate (%)"
+                  min={0}
+                  step={0.1}
+                  value={inputs.inflationRatePercentage}
+                  onChange={(value) => {
+                    updateInput('inflationRatePercentage', value);
+                  }}
+                />
 
-          <AnnuityRateField
-            value={inputs.annuityRatePercentage}
-            onChange={(value) => {
-              updateInput('annuityRatePercentage', value);
-            }}
-          />
-        </form>
+                <AnnuityRateField
+                  value={inputs.annuityRatePercentage}
+                  onChange={(value) => {
+                    updateInput('annuityRatePercentage', value);
+                  }}
+                />
+              </div>
+            </section>
+          </form>
 
-        <OutputsSummary outputs={outputs} />
+          <aside className="card projection-card">
+            <h2 className="eyebrow">Your Projection</h2>
+            <OutputsSummary outputs={outputs} />
+          </aside>
+        </div>
 
         <AssumptionsSection
           annuityRatePercentage={inputs.annuityRatePercentage}
@@ -231,7 +251,7 @@ function App() {
                 setSnapshotLabel(event.target.value);
               }}
             />
-            <button type="button" onClick={saveSnapshot}>
+            <button type="button" className="primary" onClick={saveSnapshot}>
               Save Snapshot
             </button>
             <button type="button" onClick={generatePresets}>

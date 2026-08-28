@@ -20,6 +20,7 @@ function getSnapshotId(snapshot: Snapshot): string {
 interface SnapshotRowProps {
   snapshot: Snapshot;
   isDragging: boolean;
+  isExpanded: boolean;
   registerRow: (id: string, row: HTMLElement | null) => void;
   startDrag: (id: string) => void;
   moveItem: (id: string, direction: 'up' | 'down') => void;
@@ -29,6 +30,7 @@ interface SnapshotRowProps {
 const SnapshotRow = memo(function SnapshotRow({
   snapshot,
   isDragging,
+  isExpanded,
   registerRow,
   startDrag,
   moveItem,
@@ -91,30 +93,42 @@ const SnapshotRow = memo(function SnapshotRow({
         </button>
       </td>
       <td className="col-label">{snapshot.label}</td>
-      <td>
-        {snapshot.inputs.currentAge} → {snapshot.inputs.retirementAge}
-      </td>
-      <td>{snapshot.inputs.statePensionEnabled ? 'Yes' : 'No'}</td>
-      <td>{formatCurrency(snapshot.inputs.salary)}</td>
+      {isExpanded && (
+        <>
+          <td>
+            {snapshot.inputs.currentAge} → {snapshot.inputs.retirementAge}
+          </td>
+          <td>{formatPercentage(snapshot.inputs.growthRatePercentage)}</td>
+        </>
+      )}
       <td>
         {formatPercentage(snapshot.inputs.yourContributionPercentage)} /{' '}
         {formatPercentage(snapshot.inputs.employerContributionPercentage)}
       </td>
-      <td>{formatPercentage(snapshot.inputs.growthRatePercentage)}</td>
-      <td>{formatPercentage(snapshot.inputs.inflationRatePercentage)}</td>
-      <td>{formatPercentage(snapshot.inputs.pensionChargesPercentage)}</td>
-      <td>{formatPercentage(snapshot.inputs.annuityRatePercentage)}</td>
-      <td>{formatCurrency(snapshot.outputs.totalPotValue)}</td>
       <td>
         {formatCurrency(snapshot.outputs.lumpSumValue)} (
         {formatPercentage(snapshot.inputs.lumpSumPercentage)})
       </td>
-      <td>{formatCurrency(snapshot.outputs.potIncome)}</td>
-      <td>{formatCurrency(snapshot.outputs.statePensionIncome)}</td>
-      <td>
-        {formatCurrency(snapshot.outputs.incomePerMonth)} /{' '}
-        {formatCurrency(snapshot.outputs.incomePerYear)}
-      </td>
+      <td>{formatCurrency(snapshot.outputs.totalPotValue)}</td>
+      <td>{formatCurrency(snapshot.outputs.incomePerYear)}</td>
+      <td>{formatCurrency(snapshot.outputs.incomePerMonth)}</td>
+      {isExpanded && (
+        <>
+          <td>{formatCurrency(snapshot.inputs.currentPot)}</td>
+          <td>{formatCurrency(snapshot.inputs.salary)}</td>
+          <td>
+            {snapshot.inputs.statePensionEnabled
+              ? formatCurrency(snapshot.outputs.statePensionIncome)
+              : 'Not included'}
+          </td>
+          <td>{formatPercentage(snapshot.inputs.pensionChargesPercentage)}</td>
+          <td>{formatPercentage(snapshot.inputs.inflationRatePercentage)}</td>
+          <td>{formatPercentage(snapshot.inputs.annuityRatePercentage)}</td>
+          <td>{formatCurrency(snapshot.outputs.lumpSumValue)}</td>
+          <td>{formatCurrency(snapshot.outputs.potIncome)}</td>
+          <td>{formatCurrency(snapshot.outputs.statePensionIncome)}</td>
+        </>
+      )}
       <td>
         <button type="button" onClick={handleRemove}>
           Remove
@@ -171,19 +185,30 @@ export function SnapshotTable({
         <tr>
           <th className="col-drag"></th>
           <th className="col-label">Snapshot</th>
-          <th>Ages</th>
-          <th>State Pension</th>
-          <th>Salary (p/a)</th>
+          {shouldShowDialog && (
+            <>
+              <th>Ages</th>
+              <th>Growth Rate</th>
+            </>
+          )}
           <th>Contributions</th>
-          <th>Growth Rate</th>
-          <th>Inflation</th>
-          <th>Charges</th>
-          <th>Annuity Rate</th>
-          <th>Total Pot Value</th>
           <th>Lump Sum</th>
-          <th>Pot Income (p/a)</th>
-          <th>State Pension Income (p/a)</th>
-          <th>Gross Income (p/m - p/a)</th>
+          <th>Total Pot Value</th>
+          <th>Income/Year</th>
+          <th>Income/Month</th>
+          {shouldShowDialog && (
+            <>
+              <th>Current Pot</th>
+              <th>Salary (p/a)</th>
+              <th>State Pension</th>
+              <th>Charges</th>
+              <th>Inflation</th>
+              <th>Annuity Rate</th>
+              <th>Lump Sum Value</th>
+              <th>Pot Income (p/a)</th>
+              <th>State Pension Income (p/a)</th>
+            </>
+          )}
           <th></th>
         </tr>
       </thead>
@@ -193,6 +218,7 @@ export function SnapshotTable({
             key={snapshot.id}
             snapshot={snapshot}
             isDragging={snapshot.id === draggingId}
+            isExpanded={shouldShowDialog}
             registerRow={registerRow}
             startDrag={startDrag}
             moveItem={moveItem}
