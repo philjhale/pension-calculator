@@ -4,6 +4,7 @@ import {
   DEFAULT_ANNUITY_RATE_PERCENTAGE,
   DEFAULT_PENSION_CHARGES_PERCENTAGE,
   MIN_RETIREMENT_AGE,
+  STATE_PENSION_ANNUAL,
 } from './calculator/constants';
 import type { PensionProjectionInputs } from './calculator/types';
 import { AnnuityRateField } from './components/AnnuityRateField';
@@ -15,6 +16,7 @@ import { OutputsSummary } from './components/OutputsSummary';
 import { PensionChargesField } from './components/PensionChargesField';
 import { SnapshotTable } from './components/SnapshotTable';
 import { loadInputs, saveInputs } from './config/storage';
+import { formatCurrency } from './format';
 import { generatePresetSnapshots } from './snapshot/presets';
 import { loadSnapshots, saveSnapshots } from './snapshot/storage';
 import type { Snapshot } from './snapshot/types';
@@ -93,6 +95,7 @@ function App() {
           <form className="layout-left">
             <section className="card">
               <h2 className="eyebrow">Basics</h2>
+              <p className="card-subtitle">You &amp; your pot</p>
               <div className="card-fields">
                 <NumberField
                   id="current-age"
@@ -126,7 +129,8 @@ function App() {
                         updateInput('statePensionEnabled', event.target.checked);
                       }}
                     />
-                    I&apos;ll receive the State Pension
+                    I&apos;ll receive the State Pension (
+                    {formatCurrency(STATE_PENSION_ANNUAL)}/yr)
                   </label>
                 </div>
 
@@ -165,6 +169,7 @@ function App() {
 
             <section className="card">
               <h2 className="eyebrow">Contributions</h2>
+              <p className="card-subtitle">Going in each month</p>
               <div className="card-fields">
                 <ContributionField
                   id="your-contribution"
@@ -197,6 +202,7 @@ function App() {
 
             <section className="card">
               <h2 className="eyebrow">Charges &amp; Rates</h2>
+              <p className="card-subtitle">The fine print that moves the number</p>
               <div className="card-fields">
                 <PensionChargesField
                   value={inputs.pensionChargesPercentage}

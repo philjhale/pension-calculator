@@ -101,10 +101,19 @@ h2.eyebrow {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  margin: 0;
   color: var(--accent);
 }
 p {
   margin: 0;
+}
+
+.card-subtitle {
+  font-family: var(--heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-h);
+  margin: 4px 0 20px;
 }
 
 code,
@@ -181,9 +190,9 @@ main {
 .field input[type='text'] {
   font: inherit;
   font-size: 16px;
-  padding: 8px 10px;
+  padding: 14px 20px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 999px;
   background: var(--input-bg);
   color: var(--text-h);
 }
@@ -236,9 +245,9 @@ main {
 button {
   font: inherit;
   font-size: 14px;
-  padding: 8px 14px;
+  padding: 10px 20px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 999px;
   background: var(--input-bg);
   color: var(--text-h);
   cursor: pointer;
@@ -249,9 +258,9 @@ button:hover {
 }
 
 button[aria-pressed='true'] {
-  background: var(--accent-bg);
-  border-color: var(--accent-border);
-  color: var(--accent);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
 }
 
 button.primary {

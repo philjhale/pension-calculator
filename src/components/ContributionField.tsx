@@ -32,7 +32,7 @@ export function ContributionField({
           value={text}
           onChange={handleChange}
         />
-        <output>{formatCurrency(monthlyAmount)}/month</output>
+        <output>{formatCurrency(monthlyAmount)}/mo</output>
       </div>
     </div>
   );
